@@ -5,7 +5,6 @@ username=`whoami`
 sudo adduser $username dialout
 echo
 
-
 # system monitor
 sudo add-apt-repository ppa:indicator-multiload/stable-daily -y
 sudo apt-get update
@@ -15,49 +14,32 @@ sudo apt-get update
 sudo apt-get install vim htop meld gitk git-cola indicator-multiload -y
 
 # install some codecs
-sudo apt-get install libavformat-extra-53 libavcodec-extra-53 ubuntu-restricted-extras -y
-
-
-# install oracle java 7 (REALLY recomended for eclipse)
-sudo add-apt-repository ppa:webupd8team/java
-sudo apt-get update
-sudo apt-get install oracle-java7-installer -y
-
-
-# eclipse (copied from pascal gohl)  (merci)
-wget http://mirror.switch.ch/eclipse/technology/epp/downloads/release/kepler/SR1/eclipse-cpp-kepler-SR1-linux-gtk-x86_64.tar.gz
-tar -zxvf eclipse-cpp-kepler-SR1-linux-gtk-x86_64.tar.gz
-sudo mv eclipse /opt
-sudo chown pascal -R /opt/eclipse/
-sudo ln -s /opt/eclipse/eclipse /usr/sbin/eclipse
-rm eclipse-cpp-kepler-SR1-linux-gtk-x86_64.tar.gz
-# setup unity link
-cat > eclipse.desktop << "EOF"
-[Desktop Entry]
-Name=Eclipse
-Type=Application
-Exec=eclipse
-Terminal=false
-Icon=eclipse
-Comment=Integrated Development Environment
-NoDisplay=false
-Categories=Development;IDE;
-Name[en]=Eclipse
-EOF
-sudo mv eclipse.desktop /opt/eclipse/
-sudo desktop-file-install /opt/eclipse/eclipse.desktop
-sudo cp /opt/eclipse/icon.xpm /usr/share/pixmaps/eclipse.xpm
+#sudo apt-get install libavformat-extra-53 libavcodec-extra-53 ubuntu-restricted-extras -y
 
 # --- SET UP ROS ---
 
 # add ros repository to package manager
-sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu raring main" > /etc/apt/sources.list.d/ros-latest.list'
+UBUNTU_VERSION=$(lsb_release -a)
+if [[ $UBUNTU_VERSION == *12.10* ]]
+	then
+		sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu quantal main" > /etc/apt/sources.list.d/ros-latest.list'
+	elif [[ $UBUNTU_VERSION == *13.04* ]]
+      then 
+		   sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu raring main" > /etc/apt/sources.list.d/ros-latest.list'
+	elif [[ $UBUNTU_VERSION == *12.04* ]]
+      then
+		   sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu precise main" > /etc/apt/sources.list.d/ros-latest.list'
+	else
+		echo "Unknown Ubuntu Version for ROS Hydro"
+fi
+
+
 
 # add key to ros repository
 wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
 
 # update package manager
-sudo apt-get update
+sudo apt-get update 
 
 # install ros hydro
 sudo apt-get install ros-hydro-desktop-full -y
@@ -126,7 +108,7 @@ git config --global user.email $git_email
 echo ""
 
 git config --global credential.helper cache
-git config --global push.default simple
+git config --global push.default current
 
 git config --list
 
