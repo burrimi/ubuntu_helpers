@@ -10,8 +10,8 @@ sudo apt-get install oracle-java7-installer -y
 wget http://mirror.switch.ch/eclipse/technology/epp/downloads/release/kepler/SR1/eclipse-cpp-kepler-SR1-linux-gtk-x86_64.tar.gz
 tar -zxvf eclipse-cpp-kepler-SR1-linux-gtk-x86_64.tar.gz
 sudo mv eclipse /opt
-sudo chown $username -R /opt/eclipse/
-sudo ln -s /opt/eclipse/eclipse /usr/sbin/eclipse
+sudo chown $USER -R /opt/eclipse/
+sudo ln -sf /opt/eclipse/eclipse /usr/sbin/eclipse
 rm eclipse-cpp-kepler-SR1-linux-gtk-x86_64.tar.gz
 # setup unity link
 cat > eclipse.desktop << "EOF"
